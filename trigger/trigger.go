@@ -47,7 +47,7 @@ func (t *Trigger) TriggerDeployment(action, endpoint, token string) (*TriggerRes
 	}
 
 	query := url.Values{}
-	query.Add("token", token)
+
 	data, err := json.Marshal(t)
 	if err != nil {
 		return nil, err
@@ -57,6 +57,7 @@ func (t *Trigger) TriggerDeployment(action, endpoint, token string) (*TriggerRes
 	route.RawQuery = query.Encode()
 	req, err := http.NewRequest("POST", route.String(), rawData)
 	req.Header.Add("Accept", "application/json")
+	req.Header.Add("X-Api-Token", token)
 	if err != nil {
 		return nil, err
 	}
