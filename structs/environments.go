@@ -5,7 +5,7 @@ type Environment struct {
 	Name              string `json:"name"`
 	CurrentVersion    string `json:"current_version"`
 	IsAutomatic       bool   `json:"is_automatic"`
-	RepositoryId      string `json:"repository_id"`
+	RepositoryId      int    `json:"repository_id"`
 	BranchName        string `json:"branch_name"`
 	DeployWebhookUrl  string `json:"deploy_webhook_url"`
 	StatusBadgePngUrl string `json:"status_badge_png_url"`
@@ -15,6 +15,5 @@ type Environment struct {
 }
 
 type Environments struct {
-	Meta    `json:"meta"`
-	Entries []Environment `json:"entries,omitempty"`
+	ComparedObject
 }

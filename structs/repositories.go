@@ -13,6 +13,5 @@ type Repository struct {
 }
 
 type Repositories struct {
-	Meta    `json:"meta"`
-	Entries []Repository `json:"entries,omitempty"`
+	ComparedObject
 }

@@ -3,7 +3,6 @@ package trigger
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -41,6 +40,7 @@ func (t *Trigger) TriggerDeployment(action, endpoint, token string) (*TriggerRes
 	client := &http.Client{
 		Timeout: 60 * time.Second,
 	}
+
 	route, err := url.Parse(endpoint + action)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (t *Trigger) TriggerDeployment(action, endpoint, token string) (*TriggerRes
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("data %v \n", string(data))
+
 	rawData := bytes.NewReader(data)
 	route.RawQuery = query.Encode()
 	req, err := http.NewRequest("POST", route.String(), rawData)
@@ -60,10 +60,12 @@ func (t *Trigger) TriggerDeployment(action, endpoint, token string) (*TriggerRes
 	if err != nil {
 		return nil, err
 	}
+
 	resp, _ := client.Do(req)
 	defer resp.Body.Close()
+
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Printf("%v \n", string(body))
 	json.Unmarshal(body, &triggerResponse)
+
 	return &triggerResponse, nil
 }

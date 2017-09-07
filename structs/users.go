@@ -12,7 +12,6 @@ type User struct {
 }
 
 type Users struct {
-	Meta     `json:"meta"`
-	Entries  []User `json:"entries,omitempty"`
+	ComparedObject
 	Designer string `json:"designer"`
 }

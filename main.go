@@ -11,25 +11,22 @@ import (
 
 func main() {
 	client := client.Client{}
-	var users structs.Environments
+	var env structs.Environments
 	trigger := trigger.Trigger{
-		EnvironmentId:       61302,
-		UserId:              38924,
-		DeployedVersion:     "47cdbd47887549d19d5ffab24c91fae7b6ffcb56",
+		EnvironmentId:       2,
+		UserId:              4,
+		DeployedVersion:     "",
 		DeployFromScratch:   false,
 		TriggerNotification: false,
 		Comment:             "Merge master",
 	}
 	token, endpoint := client.ReadConfig()
 	params := map[string]string{
-		"limit":         "20",
-		"repository_id": "1810",
+		"limit": "20",
 	}
-	resp, err := trigger.TriggerDeployment("/deployments/61302", *endpoint, *token)
-	fmt.Printf("resp %v \n", resp)
-	fmt.Printf("error %v \n", err)
+	resp, _ := trigger.TriggerDeployment("/deployments", *endpoint, *token)
 	data, _ := client.GetData("/environments", *endpoint, *token, params)
-	json.Unmarshal(data, &users)
-
-	fmt.Printf("%v \n", users)
+	json.Unmarshal(data, &env)
+	fmt.Printf("resp %v \n", resp)
+	fmt.Printf("%v \n", env)
 }

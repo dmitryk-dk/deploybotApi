@@ -18,6 +18,5 @@ type Deployment struct {
 }
 
 type Deployments struct {
-	Meta    `json:"meta"`
-	Entries []Deployment `json:"entries,omitempty"`
+	ComparedObject
 }
