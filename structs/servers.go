@@ -12,7 +12,9 @@ type Server struct {
 	UpdatedAt      string `json:"updated_at"`
 }
 
+//68282 Dev 1 Kiev sftp 33598 46319   2016/01/21 08:17:33 -0800 2017/05/17 08:31:23 -0700
+
 type Servers struct {
-	Meta
-	Entries []Server `json:"entries"`
+	Meta    `json:"meta"`
+	Entries []Server `json:"entries,omitempty"`
 }

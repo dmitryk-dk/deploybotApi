@@ -13,6 +13,6 @@ type Repository struct {
 }
 
 type Repositories struct {
-	Meta
-	Entries []Repositories `json:"entries"`
+	Meta    `json:"meta"`
+	Entries []Repository `json:"entries,omitempty"`
 }

@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"flag"
 	"io/ioutil"
-	"net/url"
 	"net/http"
+	"net/url"
+	"time"
 )
 
 type Client struct {
@@ -13,7 +14,7 @@ type Client struct {
 	Token    string `json:"token"`
 }
 
-func (c Client) ReadConfig() (*string, *string) {
+func (c *Client) ReadConfig() (*string, *string) {
 	flagName := c.ReadFlags()
 	file, err := ioutil.ReadFile(*flagName)
 	err = json.Unmarshal(file, &c)
@@ -23,13 +24,17 @@ func (c Client) ReadConfig() (*string, *string) {
 	return &c.Token, &c.Endpoint
 }
 
-func (c Client) ReadFlags() (configFile *string) {
+func (c *Client) ReadFlags() (configFile *string) {
 	configFile = flag.String("config", "config.json", "Path to config file")
 	flag.Parse()
 	return
 }
 
-func (c Client) GetData(action, endpoint, token string, params map[string]string) ([]byte, error) {
+func (c *Client) GetData(action, endpoint, token string, params map[string]string) ([]byte, error) {
+	client := &http.Client{
+		Timeout: 60 * time.Second,
+	}
+
 	route, err := url.Parse(endpoint + action)
 	if err != nil {
 		return nil, err
@@ -43,11 +48,12 @@ func (c Client) GetData(action, endpoint, token string, params map[string]string
 	}
 
 	route.RawQuery = query.Encode()
-	response, err := http.Get(route.String())
+	req, err := http.NewRequest("GET", route.String(), nil)
 	if err != nil {
 		return nil, err
 	}
-	defer response.Body.Close()
-	body, _ := ioutil.ReadAll(response.Body)
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
 	return body, nil
 }

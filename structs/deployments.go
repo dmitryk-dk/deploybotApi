@@ -18,6 +18,6 @@ type Deployment struct {
 }
 
 type Deployments struct {
-	Meta
-	Entries []Deployment `json:"entries"`
+	Meta    `json:"meta"`
+	Entries []Deployment `json:"entries,omitempty"`
 }
