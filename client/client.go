@@ -53,7 +53,10 @@ func (c *Client) GetData(action, endpoint, token string, params map[string]strin
 		return nil, err
 	}
 
-	resp, _ := client.Do(req)
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)

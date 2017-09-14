@@ -35,8 +35,7 @@ type TriggerResponse struct {
 	DeployedAt          string `json:"deployed_at"`
 }
 
-func (t *Trigger) TriggerDeployment(action, endpoint, token string) (*TriggerResponse, error) {
-	var triggerResponse TriggerResponse
+func (t *Trigger) TriggerDeployment(action, endpoint, token string) ([]byte, error) {
 	client := &http.Client{
 		Timeout: 60 * time.Second,
 	}
@@ -65,8 +64,10 @@ func (t *Trigger) TriggerDeployment(action, endpoint, token string) (*TriggerRes
 	resp, _ := client.Do(req)
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
-	json.Unmarshal(body, &triggerResponse)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 
-	return &triggerResponse, nil
+	return body, nil
 }
